@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "go.formatTool": "gofmt",
+  "go.formatFlags": [],
+  "[go]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "golang.go"
+  }
+}
