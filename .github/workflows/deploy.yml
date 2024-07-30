@@ -1,0 +1,52 @@
+name: Deploy to Tencent Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.16"
+
+      - name: Build
+        run: go build -o myapp ./...
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build . -t myapp:latest
+
+      - name: Push Docker image
+        run: docker tag myapp:latest junfengjiang/myapp:latest
+      - run: docker push junfengjiang/myapp:latest
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+
+  #   steps:
+  #     - name: SSH to server and deploy
+  #       uses: appleboy/ssh-action@v0.1.6
+  #       with:
+  #         host: ${{ secrets.SERVER_HOST }}
+  #         username: ${{ secrets.SERVER_USERNAME }}
+  #         key: ${{ secrets.SERVER_SSH_KEY }}
+  #         script: |
+  #           docker pull junfengjiang/myapp:latest
+  #           docker stop myapp || true
+  #           docker rm myapp || true
+  #           docker run -d --name myapp -p 8080:8080 junfengjiang/myapp:latest
