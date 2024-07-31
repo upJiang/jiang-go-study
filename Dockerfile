@@ -11,10 +11,10 @@ COPY . .
 RUN go mod tidy
 
 # 编译 Go 程序
-RUN go build -o myapp ./cmd/myapp
+RUN go build -o jiang-study-go
 
 # 声明服务端口
 EXPOSE 8080
 
 # 启动 Go 应用
-CMD ["./myapp"]
+CMD ["./jiang-study-go"]
