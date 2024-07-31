@@ -45,6 +45,6 @@ jobs:
           script: |
             docker login --username ${{ secrets.ALIYUN_DOCKER_USERNAME }} --password ${{ secrets.ALIYUN_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
             docker pull registry.cn-hangzhou.aliyuncs.com/jiang-go/jiang-go-study:latest
-            docker stop jiang-go-study || true
-            docker rm jiang-go-study || true
+            docker ps -q --filter "name=jiang-go-study" | grep -q . && docker stop jiang-go-study || echo "Container jiang-go-study is not running"
+            docker ps -a -q --filter "name=jiang-go-study" | grep -q . && docker rm jiang-go-study || echo "Container jiang-go-study does not exist"
             docker run -d --name jiang-go-study -p 8080:8080 registry.cn-hangzhou.aliyuncs.com/jiang-go/jiang-go-study:latest
